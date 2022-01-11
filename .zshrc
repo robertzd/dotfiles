@@ -14,17 +14,18 @@ if ! ss -a | grep -q "$SSH_AUTH_SOCK"; then
   unset wsl2_ssh_pageant_bin
 fi
 
+## History
+HISTFILE=~/.zsh_histfile
+HISTSIZE=9999
+SAVEHIST=9999
+setopt appendhistory
 
-################
-## Aliases
-################
-
-# Misc
+# Misc alias
 alias ls="exa --icons --group-directories-first"
-alias ll="exa --icons --group-directories-first -l"
+alias ll="exa --icons --group-directories-first -l -g"
 alias grep='grep --color'
 
-# Kubectl Functions
+# Kubectl alias and Functions/autocomplete etc.
 alias k="kubectl"
 alias h="helm"
 
@@ -43,3 +44,40 @@ knd() {
 ku() {
     kubectl config unset current-context
 }
+
+source <(kubectl completion zsh)
+
+
+
+
+
+# find out which distribution we are running on
+_distro=$(awk '/^ID=/' /etc/*-release | awk -F'=' '{ print tolower($2) }')
+
+# set an icon based on the distro
+case $_distro in
+    *kali*)                  ICON="ﴣ";;
+    *arch*)                  ICON="";;
+    *debian*)                ICON="";;
+    *raspbian*)              ICON="";;
+    *ubuntu*)                ICON="";;
+    *elementary*)            ICON="";;
+    *fedora*)                ICON="";;
+    *coreos*)                ICON="";;
+    *gentoo*)                ICON="";;
+    *mageia*)                ICON="";;
+    *centos*)                ICON="";;
+    *opensuse*|*tumbleweed*) ICON="";;
+    *sabayon*)               ICON="";;
+    *slackware*)             ICON="";;
+    *linuxmint*)             ICON="";;
+    *alpine*)                ICON="";;
+    *aosc*)                  ICON="";;
+    *nixos*)                 ICON="";;
+    *devuan*)                ICON="";;
+    *manjaro*)               ICON="";;
+    *rhel*)                  ICON="";;
+    *)                       ICON="";;
+esac
+
+export STARSHIP_DISTRO="$ICON "
