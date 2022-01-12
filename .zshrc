@@ -24,6 +24,7 @@ setopt appendhistory
 alias ls="exa --icons --group-directories-first"
 alias ll="exa --icons --group-directories-first -l -g"
 alias grep='grep --color'
+alias d='docker'
 
 # Kubectl alias and Functions/autocomplete etc.
 alias k="kubectl"
