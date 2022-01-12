@@ -1,6 +1,10 @@
 # My dotfiles  
   
-  
-config/starship.toml  - Starship (https://starship.rs)  
-.vimrc                - VIM  
-.zshrc                - ZSH  
+Load repo with YADM (https://yadm.io/)  
+
+| File | Program |
+| --------- | --------- |
+| config/starship.toml | Starship (Linux) |
+| .vimrc | VIM |
+| .zshrc | ZSH |
+| .tmux.conf | TMUX |  
