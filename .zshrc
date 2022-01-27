@@ -48,8 +48,9 @@ ku() {
 
 source <(kubectl completion zsh)
 
-
-
+# Setup for Vagrant/Virtualbox
+export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
+export PATH="$PATH:/mnt/c/Program Files/Oracle/VirtualBox"
 
 
 # find out which distribution we are running on
