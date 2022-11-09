@@ -2,6 +2,9 @@
 eval "$(starship init zsh)"
 
 ## Loader for WSL to talk to local GPG
+#
+# https://github.com/BlackReloaded/wsl2-ssh-pageant
+#
 export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
 if ! ss -a | grep -q "$SSH_AUTH_SOCK"; then
   rm -f "$SSH_AUTH_SOCK"
@@ -21,26 +24,23 @@ SAVEHIST=9999
 setopt appendhistory
 
 # Misc alias
+# install exa from apt
 alias ls="exa --icons --group-directories-first"
 alias ll="exa --icons --group-directories-first -l -g"
 alias grep='grep --color'
 alias d='docker'
 
 # Kubectl alias and Functions/autocomplete etc.
+#
+# kubecm : https://github.com/sunny0826/kubecm
+# kubectx : https://github.com/ahmetb/kubectx
+#
 alias k="kubectl"
 alias h="helm"
-
-kn() {
-    if [ "$1" != "" ]; then
-	    kubectl config set-context --current --namespace=$1
-    else
-	    echo -e "\e[1;31m Error, please provide a valid Namespace\e[0m"
-    fi
-}
-
-knd() {
-    kubectl config set-context --current --namespace=default
-}
+# alias kn="kubens"
+alias kx="kubectx"
+alias kc="kubecm"
+alias kn="kubecm namespace"
 
 ku() {
     kubectl config unset current-context
