@@ -1,85 +1,79 @@
 ## Invoke starship
 eval "$(starship init zsh)"
 
-## Loader for WSL to talk to local GPG
-#
-# https://github.com/BlackReloaded/wsl2-ssh-pageant
-#
-export SSH_AUTH_SOCK="$HOME/.ssh/agent.sock"
-if ! ss -a | grep -q "$SSH_AUTH_SOCK"; then
-  rm -f "$SSH_AUTH_SOCK"
-  wsl2_ssh_pageant_bin="$HOME/.ssh/wsl2-ssh-pageant.exe"
-  if test -x "$wsl2_ssh_pageant_bin"; then
-    (setsid nohup socat UNIX-LISTEN:"$SSH_AUTH_SOCK,fork" EXEC:"$wsl2_ssh_pageant_bin" >/dev/null 2>&1 &)
-  else
-    echo >&2 "WARNING: $wsl2_ssh_pageant_bin is not executable."
-  fi
-  unset wsl2_ssh_pageant_bin
+## Zinit Plugin manger config and download if missing and then source it
+ZINIT_HOME="${XDG_DATA_HOME:-${HOME}/.local/share}/zinit/zinit.git"
+if [ ! -d "$ZINIT_HOME" ]; then
+   mkdir -p "$(dirname $ZINIT_HOME)"
+   git clone https://github.com/zdharma-continuum/zinit.git "$ZINIT_HOME"
 fi
+source "${ZINIT_HOME}/zinit.zsh"
+
+## ZINIT: Add plugin
+zinit light zsh-users/zsh-syntax-highlighting
+zinit light zsh-users/zsh-completions
+zinit light zsh-users/zsh-autosuggestions
+zinit light Aloxaf/fzf-tab 
+
+# Completion styling
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Za-z}'
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}"
+zstyle ':completion:*' menu no
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa --icons --group-directories-first -l --no-permissions --no-user --no-time --no-filesize $realpath'
+zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'exa --icons --group-directories-first -l --no-permissions --no-user --no-time --no-filesize  $realpath'
+
+# Add in snippets
+zinit snippet OMZP::sudo
+zinit snippet OMZP::command-not-found
+
+## Load Auotcompletion 
+autoload -U compinit && compinit
+source <(kubectl completion zsh)
+
+## Load snippts
+zinit cdreplay -q
 
 ## History
 HISTFILE=~/.zsh_histfile
 HISTSIZE=9999
-SAVEHIST=9999
+SAVEHIST=$HISTSIZE
+HISTDUP=erase
 setopt appendhistory
+setopt sharehistory
+setopt hist_ignore_space
+setopt hist_ignore_all_dups
+setopt hist_save_no_dups
+setopt hist_ignore_dups
+setopt hist_find_no_dups
 
-# Misc alias
-# install exa from apt
+# Aliases 
+alias vim=nvim
 alias ls="exa --icons --group-directories-first"
-alias ll="exa --icons --group-directories-first -l -g"
+alias ll="exa --icons --group-directories-first -l -g -a"
 alias grep='grep --color'
 alias d='docker'
-
-# Kubectl alias and Functions/autocomplete etc.
-#
-# kubecm : https://github.com/sunny0826/kubecm
-# kubectx : https://github.com/ahmetb/kubectx
-#
 alias k="kubectl"
-alias h="helm"
-# alias kn="kubens"
-alias kx="kubectx"
+alias kx="kubecm switch"
 alias kc="kubecm"
 alias kn="kubecm namespace"
-
 ku() {
     kubectl config unset current-context
 }
 
-source <(kubectl completion zsh)
 
-# Setup for Vagrant/Virtualbox
-export VAGRANT_WSL_ENABLE_WINDOWS_ACCESS="1"
-export PATH="$PATH:/mnt/c/Program Files/Oracle/VirtualBox"
+## shell integrations
+eval "$(fzf --zsh)"
+eval "$(zoxide init --cmd cd zsh)"
+
+# Ensure GPG agent is set for ssh sessions (for Youbikey)
+unset SSH_AGENT_PID
+if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
+  export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
+fi
 
 
-# find out which distribution we are running on
-_distro=$(awk '/^ID=/' /etc/*-release | awk -F'=' '{ print tolower($2) }')
-
-# set an icon based on the distro
-case $_distro in
-    *kali*)                  ICON="ﴣ";;
-    *arch*)                  ICON="";;
-    *debian*)                ICON="";;
-    *raspbian*)              ICON="";;
-    *ubuntu*)                ICON="";;
-    *elementary*)            ICON="";;
-    *fedora*)                ICON="";;
-    *coreos*)                ICON="";;
-    *gentoo*)                ICON="";;
-    *mageia*)                ICON="";;
-    *centos*)                ICON="";;
-    *opensuse*|*tumbleweed*) ICON="";;
-    *sabayon*)               ICON="";;
-    *slackware*)             ICON="";;
-    *linuxmint*)             ICON="";;
-    *alpine*)                ICON="";;
-    *aosc*)                  ICON="";;
-    *nixos*)                 ICON="";;
-    *devuan*)                ICON="";;
-    *manjaro*)               ICON="";;
-    *rhel*)                  ICON="";;
-    *)                       ICON="";;
-esac
-
-export STARSHIP_DISTRO="$ICON "
+# fzf Catppuccine color theme
+export FZF_DEFAULT_OPTS=" \
+--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
+--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+--color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
