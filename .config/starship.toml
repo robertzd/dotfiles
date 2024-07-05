@@ -1,92 +1,108 @@
-# ~/.config/starship.toml
+## StarShip: ~/.config/starship.toml
 
-# Inserts a blank line between shell prompts
 add_newline = true
+command_timeout = 1
 
-# Change command timeout from 500 to 1000 ms
-command_timeout = 1000
-
-# Change the default prompt format
 format = """\
-[╭╴](238)$env_var\
-$all[╰─](238)$character"""
-# 
-# Change the default prompt characters
+$os$directory$git_branch$git_status$kubernetes
+❯ """
+
+
 [character]
-success_symbol = "[](238)"
-error_symbol = "[](238)"
+error_symbol = "[✖](maroon) "
 
-# Shows an icon that should be included by zshrc script based on the distribution or os
-[env_var.STARSHIP_DISTRO]
-format = '[$env_value](bold white) '
-variable = "STARSHIP_DISTRO"
+[os]
+format = '[$symbol]($style)'
 disabled = false
 
-# Shows the username
-[username]
-style_user = "white bold"
-style_root = "black bold"
-format = "[$user]($style) "
-disabled = false
-show_always = true
-
-[directory]
-truncation_length = 3
-truncation_symbol = "…/"
-home_symbol = " ~"
-read_only_style = "197"
-read_only = "  "
-format = "at [$path]($style)[$read_only]($read_only_style) "
-
-[git_branch]
-symbol = " "
-format = "on [$symbol$branch]($style) "
-truncation_length = 4
-truncation_symbol = "…/"
-style = "bold green"
+[os.symbols]
+Windows = ' '
+Arch = '󰣇'
+Ubuntu = ' '
+Macos = '󰀵 '
 
 [git_status]
-format = '[\($all_status$ahead_behind\)]($style) '
-style = "bold green"
-conflicted = "🏳"
-up_to_date = " "
-untracked = " "
-ahead = "⇡${count}"
-diverged = "⇕⇡${ahead_count}⇣${behind_count}"
-behind = "⇣${count}"
-stashed = " "
-modified = " "
-staged = '[++\($count\)](green)'
-renamed = "襁 "
-deleted = " "
+format = '([\($all_status$ahead_behind\) ]($style))'
+style = 'green'
+conflicted = '[ confliced=${count}](red)'
+up_to_date = '[󰘽 ](green)'
+untracked = '[󰋗 ${count}](red) '
+ahead = ' ahead=${count}'
+diverged = ' ahead=${ahead_count}  behind=${behind_count}'
+behind = ' behind=${count}'
+stashed = '[ stashed=${count}](green)'
+modified = '[󰛿 ${count}](yellow) '
+staged = '[󰐗 staged=${count}](green)'
+renamed = '[󱍸 renamed=${count}](yellow)'
+deleted = '[󰍶 ${count}](red) '
 
-[terraform]
-format = "via [ terraform $version]($style) 壟 [$workspace]($style) "
+[directory]
+truncation_length = 4
+truncation_symbol = '…/'
+style = "bold lavender"
+#read_only_style = '197'
+read_only_style = 'red'
+read_only = '  ' 
+format = ' [$path]($style)[$read_only]($read_only_style) '
 
+# Shows kubernetes context and namespace
+[kubernetes]
+format = '''via [$symbol$context](blue)\[[$namespace](bold yellow)\]'''
+symbol = '󱃾 '
+disabled = false
+
+# Disabled Modules
 [vagrant]
-format = "via [ vagrant $version]($style) "
+disabled = true
 
 [docker_context]
-format = "via [ $context](bold blue) "
+disabled = true
 
 [helm]
-format = "via [ $version](bold purple) "
+disabled = true
 
 [python]
-symbol = " "
-python_binary = "python3"
+disabled = true
 
 [nodejs]
-format = "via [ $version](bold green) "
 disabled = true
 
 [ruby]
-format = "via [ $version]($style) "
+disabled = true
 
-[kubernetes]
-format = 'on [ $context\($namespace\)](bold purple) '
-disabled = false
-[kubernetes.context_aliases]
-"clcreative-k8s-staging" = "cl-k8s-staging"
-"clcreative-k8s-production" = "cl-k8s-prod"
+[terraform]
+disabled = true
 
+
+# Sets user-defined palette
+palette = "catppuccin_mocha"
+
+
+# Catppuccin Color Themes (https://github.com/catppuccin)
+[palettes.catppuccin_mocha]
+rosewater = "#f5e0dc"
+flamingo = "#f2cdcd"
+pink = "#f5c2e7"
+mauve = "#cba6f7"
+red = "#f38ba8"
+maroon = "#eba0ac"
+peach = "#fab387"
+yellow = "#f9e2af"
+green = "#a6e3a1"
+teal = "#94e2d5"
+sky = "#89dceb"
+sapphire = "#74c7ec"
+blue = "#89b4fa"
+lavender = "#b4befe"
+text = "#cdd6f4"
+subtext1 = "#bac2de"
+subtext0 = "#a6adc8"
+overlay2 = "#9399b2"
+overlay1 = "#7f849c"
+overlay0 = "#6c7086"
+surface2 = "#585b70"
+surface1 = "#45475a"
+surface0 = "#313244"
+base = "#1e1e2e"
+mantle = "#181825"
+crust = "#11111b"
