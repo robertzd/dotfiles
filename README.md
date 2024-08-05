@@ -11,3 +11,5 @@ Load repo with YADM (https://yadm.io/)
 | .config/tmux/tmux.conf | TMUX (https://github.com/tmux/tmux) |
 | .config/nvim/ | NeoVim (https://neovim.io and https://nvchad.com) |
 
+## Dependensies (install with chosen package manager)
+zsh fzf tmux nvim starship kubectl kubecm exa gnupg git zoxide
