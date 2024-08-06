@@ -12,4 +12,4 @@ Load repo with YADM (https://yadm.io/)
 | .config/nvim/ | NeoVim (https://neovim.io and https://nvchad.com) |
 
 ## Dependensies (install with chosen package manager)
-zsh fzf tmux neovim starship kubectl kubecm exa gnupg git zoxide
+zsh fzf tmux tmux-plugin-manager neovim starship kubectl kubecm exa gnupg git zoxide 
