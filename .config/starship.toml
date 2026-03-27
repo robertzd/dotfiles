@@ -1,7 +1,7 @@
 ## StarShip: ~/.config/starship.toml
 
 add_newline = true
-command_timeout = 1
+command_timeout = 1000
 
 format = """\
 $os$directory$git_branch$git_status$kubernetes

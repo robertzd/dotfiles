@@ -9,7 +9,7 @@ if [ ! -d "$ZINIT_HOME" ]; then
 fi
 source "${ZINIT_HOME}/zinit.zsh"
 
-## ZINIT: Add plugin
+## ZINIT: Add plugins
 zinit light zsh-users/zsh-syntax-highlighting
 zinit light zsh-users/zsh-completions
 zinit light zsh-users/zsh-autosuggestions
@@ -26,9 +26,16 @@ zstyle ':fzf-tab:complete:__zoxide_z:*' fzf-preview 'exa --icons --group-directo
 zinit snippet OMZP::sudo
 zinit snippet OMZP::command-not-found
 
+# Specific bindkeys
+bindkey "^[[1;5D" backward-word
+bindkey "^[[1;5C" forward-word
+bindkey "^[[H" beginning-of-line
+bindkey "^[[F" end-of-line
+
 ## Load Auotcompletion 
 autoload -U compinit && compinit
 source <(kubectl completion zsh)
+source <(talhelper completion zsh)
 
 ## Load snippts
 zinit cdreplay -q
@@ -56,6 +63,7 @@ alias k="kubectl"
 alias kx="kubecm switch"
 alias kc="kubecm"
 alias kn="kubecm namespace"
+alias cat=bat
 ku() {
     kubectl config unset current-context
 }
@@ -77,3 +85,8 @@ export FZF_DEFAULT_OPTS=" \
 --color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
 --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
 --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/home/robert/.lmstudio/bin"
+# End of LM Studio CLI section
+

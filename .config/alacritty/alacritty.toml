@@ -1,24 +1,16 @@
 
-###  Live Reload
-live_config_reload = true
-
-### Import Catppuccin theme
-import = [
-  "~/.config/alacritty/catppuccin-mocha.toml"
-]
-
 [env]
 TERM = "xterm-256color"
 
 ### opacity and blur
 [window]
-opacity = 0.93
+opacity = 1 # 0.95
 padding = {x=3,y=3}
-decorations = "none"  
+# decorations = "none"
 
 ### Font Config
 [font]
-size = 11.0
+size = 10.0
 [font.bold]
 family = "JetBrainsMono Nerd Font"
 style = "Bold"
@@ -38,9 +30,16 @@ style = "Regular"
   history = 10000
   multiplier = 5
 
+### Moved marked text to clipboard
+[selection]
+save_to_clipboard = true
 
-### Auto-open New terminal on ctr-shift-enter
-[keyboard]
-bindings = [
-   { key = "Return", mods = "Control|Shift", action = "SpawnNewInstance" }
+[general]
+
+###  Live Reload
+live_config_reload = true
+
+### Import Catppuccin theme
+import = [
+  "~/.config/alacritty/catppuccin-mocha.toml"
 ]
