@@ -73,7 +73,7 @@ ku() {
 eval "$(fzf --zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 
-# Ensure GPG agent is set for ssh sessions (for Youbikey)
+# Ensure GPG agent is set for ssh sessions (for Yubikey)
 unset SSH_AGENT_PID
 if [ "${gnupg_SSH_AUTH_SOCK_by:-0}" -ne $$ ]; then
   export SSH_AUTH_SOCK="$(gpgconf --list-dirs agent-ssh-socket)"
